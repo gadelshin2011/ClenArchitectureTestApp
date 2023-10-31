@@ -1,31 +1,19 @@
 package com.example.clenarchitecturetestapp.presentation.fragments
 
-import android.annotation.SuppressLint
-import android.content.Context
+
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import com.example.clenarchitecturetestapp.R
-import com.example.clenarchitecturetestapp.data.repository.UserRepositoryImpl
-import com.example.clenarchitecturetestapp.data.storage.sharedPref.SharedPrefUserStorage
 import com.example.clenarchitecturetestapp.databinding.FragmentMainBinding
-import com.example.clenarchitecturetestapp.domain.model.SaveUserNameParam
-import com.example.clenarchitecturetestapp.domain.model.UserName
-import com.example.clenarchitecturetestapp.domain.repository.UserRepository
-import com.example.clenarchitecturetestapp.domain.useсase.GetUserNameUseCase
-import com.example.clenarchitecturetestapp.domain.useсase.SaveUserNameUseCase
 import com.example.clenarchitecturetestapp.presentation.viewModels.MainViewModel
-import kotlin.coroutines.coroutineContext
+import com.example.clenarchitecturetestapp.presentation.viewModels.MainViewModelFactory
 
 class MainFragment : Fragment() {
     private lateinit var binding: FragmentMainBinding
-    private val userRepository by lazy { UserRepositoryImpl(userStorage = SharedPrefUserStorage(context = requireContext().applicationContext)) }
-    private val getUserUseCase by lazy { GetUserNameUseCase(userRepository) }
-    private val saveUserNameUseCase by lazy { SaveUserNameUseCase(userRepository) }
+
 
     companion object {
         fun newInstance() = MainFragment()
@@ -35,7 +23,7 @@ class MainFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
+        viewModel = ViewModelProvider(this, MainViewModelFactory(requireContext().applicationContext))[MainViewModel::class.java]
         // TODO: Use the ViewModel
     }
 
@@ -50,16 +38,22 @@ class MainFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        viewModel.publicResultLive.observe(this.viewLifecycleOwner, { text ->
+            binding.getDataTv.text =  text
+        })
+
+
         with(binding) {
             getDataButton.setOnClickListener {
-                val userName = getUserUseCase.excute()
-                getDataTv.text = "${userName.firstName} ${userName.lastName}"
+                viewModel.load()
             }
             saveDataButton.setOnClickListener {
-                val textData = saveDataTv.text.toString()
-                val param = SaveUserNameParam(textData)
-                val result: Boolean = saveUserNameUseCase.excute(params = param)
-                Toast.makeText(context, "$result", Toast.LENGTH_SHORT).show()
+                val text = saveDataEt.text.toString()
+                viewModel.save(text)
+//                when(viewModel.save(text).isNotEmpty()){
+//                    true -> Toast.makeText(context, "true", Toast.LENGTH_SHORT).show()
+//                    false -> Toast.makeText(context, "false", Toast.LENGTH_SHORT).show()
+//                }
             }
         }
 

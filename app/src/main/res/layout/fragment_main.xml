@@ -23,17 +23,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="6dp"
-            android:textColorHint="@color/material_dynamic_neutral80"
-            android:textSize="20dp"
-            android:hint="Get Data" />
+            android:textSize="20sp"
+            android:hint="@string/get_data" />
 
         <Button
             android:id="@+id/getDataButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="6dp"
-            android:textSize="16dp"
-            android:text="Get Data" />
+            android:textSize="16sp"
+            android:text="@string/get_data" />
     </LinearLayout>
 
     <LinearLayout
@@ -47,22 +46,23 @@
         app:layout_constraintTop_toBottomOf="@id/layoutFirst">
 
         <EditText
-            android:id="@+id/saveDataTv"
+            android:id="@+id/saveDataEt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:backgroundTint="@color/white"
-            android:hint="Save Data "
+            android:hint="@string/save_data"
             android:maxLines="1"
             android:minHeight="48dp"
             android:padding="6dp"
-            android:textColorHint="@color/material_dynamic_neutral80" />
+            android:importantForAutofill="no"
+            tools:ignore="TextFields" />
 
         <Button
             android:id="@+id/saveDataButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="6dp"
-            android:textSize="16dp"
-            android:text="Save Data" />
+            android:textSize="16sp"
+            android:text="@string/save_data" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
