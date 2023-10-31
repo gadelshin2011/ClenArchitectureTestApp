@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import com.example.clenarchitecturetestapp.R
 import com.example.clenarchitecturetestapp.data.repository.UserRepositoryImpl
+import com.example.clenarchitecturetestapp.data.storage.sharedPref.SharedPrefUserStorage
 import com.example.clenarchitecturetestapp.databinding.FragmentMainBinding
 import com.example.clenarchitecturetestapp.domain.model.SaveUserNameParam
 import com.example.clenarchitecturetestapp.domain.model.UserName
@@ -18,10 +19,11 @@ import com.example.clenarchitecturetestapp.domain.repository.UserRepository
 import com.example.clenarchitecturetestapp.domain.useсase.GetUserNameUseCase
 import com.example.clenarchitecturetestapp.domain.useсase.SaveUserNameUseCase
 import com.example.clenarchitecturetestapp.presentation.viewModels.MainViewModel
+import kotlin.coroutines.coroutineContext
 
 class MainFragment : Fragment() {
     private lateinit var binding: FragmentMainBinding
-    private val userRepository by lazy { UserRepositoryImpl(context = requireContext().applicationContext) }
+    private val userRepository by lazy { UserRepositoryImpl(userStorage = SharedPrefUserStorage(context = requireContext().applicationContext)) }
     private val getUserUseCase by lazy { GetUserNameUseCase(userRepository) }
     private val saveUserNameUseCase by lazy { SaveUserNameUseCase(userRepository) }
 
